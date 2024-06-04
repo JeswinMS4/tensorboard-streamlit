@@ -1,31 +1,16 @@
 import streamlit as st
-import subprocess
-import time
-import os
-
-# Function to start TensorBoard
-def start_tensorboard(logdir):
-    command = f'tensorboard --logdir={logdir} --host=0.0.0.0 --port=6006'
-    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    return process
+from PIL import Image
 
 # Streamlit interface
 st.title("Dark Guard")
-st.write("Benchmarking three models - Mobile BERT, DistilBERT, and DistilRoBERTa for the classification task of determining whether a notification is an attempt of social engineering or not.")
+st.write("Benchmarking three models - Mobile BERT, DistilBERT, and DistilRoBERTa for the classification task of determining whether a notification is an attempt at a phishing attack or not.")
 
-# Input for log directory
-logdir = st.text_input("Log Directory", value="ALL_RUNS")
+# Load images
+image1 = Image.open('eval_accuracy_l.png')
+image2 = Image.open('eval_f1_l.png')
+image3 = Image.open('eval_loss_l.png')
 
-# Button to start TensorBoard
-if st.button("Start TensorBoard"):
-    if logdir:
-        process = start_tensorboard(logdir)
-        st.success(f"TensorBoard started with log directory: {logdir}")
-        st.write("You can access TensorBoard [here](http://localhost:6006)")
-        # Give some time for TensorBoard to start
-        time.sleep(5)
-    else:
-        st.error("Please enter a valid log directory.")
-
-# Instructions to stop TensorBoard
-st.write("To stop TensorBoard, you can interrupt the kernel or kill the process manually.")
+# Display images
+st.image(image1, caption='Accuracy', use_column_width=True)
+st.image(image2, caption='F1 score', use_column_width=True)
+st.image(image3, caption='Loss', use_column_width=True)
